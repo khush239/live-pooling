@@ -5,6 +5,8 @@ import mongoose from 'mongoose';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import PollService from './services/PollService';
+import Participant from './models/Participant';
+import ChatMessage from './models/ChatMessage';
 
 dotenv.config();
 
@@ -26,9 +28,8 @@ mongoose.connect(MONGODB_URI)
     .then(() => console.log('Connected to MongoDB'))
     .catch(err => console.error('MongoDB connection error:', err));
 
-// State for real-time tracking
-const activeParticipants = new Map();
-const chatMessages: any[] = [];
+// State for real-time tracking (Backups for Serverless)
+// Note: Memory will be cleared on Vercel, so we use DB as source of truth
 let activeInterval: NodeJS.Timeout | null = null;
 
 // Socket.io Logic
@@ -38,27 +39,21 @@ io.on('connection', (socket) => {
     socket.on('join', async (data) => {
         const { name, role } = data;
 
-        // Enforce single teacher rule
-        if (role === 'teacher') {
-            for (const [id, user] of activeParticipants.entries()) {
-                if (user.role === 'teacher' && id !== socket.id) {
-                    const oldSocket = io.sockets.sockets.get(id);
-                    if (oldSocket) {
-                        oldSocket.emit('error', 'Another teacher session has started. You have been disconnected.');
-                        oldSocket.disconnect();
-                    }
-                    activeParticipants.delete(id);
-                }
-            }
-        }
+        // Save participant to DB for cross-instance sync
+        await Participant.findOneAndUpdate(
+            { socketId: socket.id },
+            { name, role, lastSeen: new Date() },
+            { upsert: true }
+        );
 
-        activeParticipants.set(socket.id, { id: socket.id, name, role });
-        io.emit('participants_update', Array.from(activeParticipants.values()));
+        const allParticipants = await Participant.find();
+        io.emit('participants_update', allParticipants);
 
-        // Send chat history
-        socket.emit('chat_history', chatMessages);
+        // Send chat history from DB
+        const history = await ChatMessage.find().sort({ timestamp: -1 }).limit(50);
+        socket.emit('chat_history', history.reverse());
 
-        // Sync late-joiners immediately
+        // Sync late-joiners
         const poll = await PollService.getActivePoll();
         if (poll && poll.endTime) {
             const remaining = Math.max(0, Math.floor((poll.endTime.getTime() - new Date().getTime()) / 1000));
@@ -66,17 +61,15 @@ io.on('connection', (socket) => {
         }
     });
 
-    socket.on('send_message', (message) => {
-        const user = activeParticipants.get(socket.id);
+    socket.on('send_message', async (message) => {
+        const user = await Participant.findOne({ socketId: socket.id });
         if (user) {
-            const chatMsg = {
-                id: Date.now().toString(),
+            const chatMsg = new ChatMessage({
                 user: user.name,
                 text: message,
                 timestamp: new Date()
-            };
-            chatMessages.push(chatMsg);
-            if (chatMessages.length > 50) chatMessages.shift(); // Keep last 50
+            });
+            await chatMsg.save();
             io.emit('new_message', chatMsg);
         }
     });
@@ -128,9 +121,10 @@ io.on('connection', (socket) => {
         }
     });
 
-    socket.on('disconnect', () => {
-        activeParticipants.delete(socket.id);
-        io.emit('participants_update', Array.from(activeParticipants.values()));
+    socket.on('disconnect', async () => {
+        await Participant.deleteOne({ socketId: socket.id });
+        const allParticipants = await Participant.find();
+        io.emit('participants_update', allParticipants);
         console.log('User disconnected');
     });
 });
@@ -148,6 +142,11 @@ app.get('/api/active-poll', async (req, res) => {
 app.get('/api/history', async (req, res) => {
     const history = await PollService.getPollHistory();
     res.json(history);
+});
+
+app.get('/api/participants', async (req, res) => {
+    const participants = await Participant.find();
+    res.json(participants);
 });
 
 // Serve static files in production

@@ -47,11 +47,19 @@ const StudentDashboard: React.FC<Props> = ({ name, socket, participants: _partic
             });
         }
 
+        // Polling fallback for active poll
+        const activePollInterval = setInterval(() => {
+            if (!socket || !socket.connected) {
+                fetchActivePoll();
+            }
+        }, 5000);
+
         return () => {
             socket?.off('new_poll');
             socket?.off('timer_tick');
             socket?.off('vote_update');
             socket?.off('poll_ended');
+            clearInterval(activePollInterval);
         };
     }, [socket]);
 

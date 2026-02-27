@@ -11,7 +11,10 @@ export const useSocket = (name: string, role: string) => {
     useEffect(() => {
         if (!name) return;
 
-        const socket = io(SOCKET_URL);
+        const socket = io(SOCKET_URL, {
+            transports: ['polling', 'websocket'], // Prefer polling for serverless/Vercel compatibility
+            reconnection: true
+        });
         socketRef.current = socket;
 
         socket.on('connect', () => {
@@ -27,7 +30,21 @@ export const useSocket = (name: string, role: string) => {
             setIsConnected(false);
         });
 
+        // Polling fallback for participants in stateless environments
+        const pollInterval = setInterval(async () => {
+            if (!socket.connected) {
+                try {
+                    const res = await fetch(`${import.meta.env.VITE_API_URL || ''}/api/participants`);
+                    const data = await res.json();
+                    setParticipants(data);
+                } catch (e) {
+                    console.error('Participant poll failed', e);
+                }
+            }
+        }, 5000);
+
         return () => {
+            clearInterval(pollInterval);
             socket.disconnect();
         };
     }, [name, role]);
