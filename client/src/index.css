@@ -58,13 +58,13 @@ html {
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    padding: 8px 16px;
+    padding: 6px 14px;
     background: var(--primary);
     color: white;
     border-radius: 30px;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     font-weight: 700;
-    margin-bottom: 24px;
+    margin-bottom: 16px;
 }
 
 h1 {
@@ -308,15 +308,15 @@ p {
 }
 
 .create-poll h1 {
-    font-size: 3.5rem;
-    margin-bottom: 1rem;
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
     line-height: 1.1;
     font-weight: 800;
 }
 
 .create-poll p {
-    font-size: 1.25rem;
-    margin-bottom: 3rem;
+    font-size: 1.1rem;
+    margin-bottom: 1.5rem;
     text-align: left;
 }
 
@@ -349,18 +349,18 @@ p {
 
 .typing-area-container {
     position: relative;
-    margin-bottom: 3rem;
+    margin-bottom: 1.5rem;
     width: 100%;
 }
 
 .typing-area-container textarea {
     width: 100%;
-    min-height: 200px;
+    min-height: 100px;
     background: #f3f4f6;
     border: none;
     border-radius: 16px;
-    padding: 2rem;
-    font-size: 1.4rem;
+    padding: 1.5rem;
+    font-size: 1.2rem;
     font-weight: 500;
     resize: none;
     outline: none;
