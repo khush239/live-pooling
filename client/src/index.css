@@ -19,8 +19,8 @@
 }
 
 html {
-    font-size: 20px;
-    /* Increased base for massive layout */
+    font-size: 16px;
+    /* Balanced base for production */
 }
 
 body {
@@ -35,18 +35,18 @@ body {
 
 @media (min-width: 1440px) {
     html {
-        font-size: 24px;
-        /* Massive font for ultra-wide screens */
+        font-size: 18px;
+        /* Comfortable font for wide screens */
     }
 }
 
 /* Onboarding */
 .onboarding-card {
     background: white;
-    padding: 6rem 5rem;
-    border-radius: 40px;
-    max-width: 1400px;
-    /* Much wider */
+    padding: 3rem 2.5rem;
+    border-radius: 32px;
+    max-width: 1000px;
+    /* Adjusted width */
     width: 95%;
     text-align: center;
     box-shadow: 0 50px 120px rgba(0, 0, 0, 0.05);
@@ -85,15 +85,15 @@ p {
 }
 
 .onboarding-card h1 {
-    font-size: 3.5rem;
-    margin-bottom: 1.5rem;
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
     line-height: 1.1;
 }
 
 .onboarding-card p {
     color: var(--text-muted);
-    font-size: 1.35rem;
-    margin-bottom: 4rem;
+    font-size: 1.1rem;
+    margin-bottom: 3rem;
     line-height: 1.6;
     max-width: 800px;
     margin-left: auto;
@@ -137,7 +137,7 @@ p {
 
 .role-desc {
     margin-bottom: 0;
-    font-size: 1.15rem;
+    font-size: 1rem;
     color: var(--text-muted);
     line-height: 1.5;
 }
@@ -498,8 +498,8 @@ p {
 
 /* Side Panel */
 .side-panel {
-    width: 800px;
-    /* Ultra-wide sidebar */
+    width: 400px;
+    /* Comfortable sidebar width */
     background: white;
     border-left: 2px solid #e5e7eb;
     display: flex;
@@ -514,15 +514,15 @@ p {
 
 .side-panel-tabs button {
     flex: 1;
-    padding: 24px;
+    padding: 16px;
     background: none;
     border: none;
     font-weight: 800;
     color: var(--text-muted);
     cursor: pointer;
     transition: all 0.2s;
-    font-size: 1.4rem;
-    /* Massive tabs */
+    font-size: 1rem;
+    /* Balanced tabs */
 }
 
 .side-panel-tabs button.active {
@@ -554,10 +554,10 @@ p {
 
 .msg {
     max-width: 90%;
-    padding: 24px 32px;
-    border-radius: 28px;
-    font-size: 1.6rem;
-    /* Massive chat font */
+    padding: 16px 20px;
+    border-radius: 20px;
+    font-size: 1rem;
+    /* Standard chat font */
     position: relative;
     line-height: 1.6;
 }
@@ -652,8 +652,8 @@ p {
 
 .participant-name {
     font-weight: 800;
-    font-size: 1.4rem;
-    /* Massive participant name */
+    font-size: 1.1rem;
+    /* Balanced participant name */
     color: var(--text-main);
 }
 
@@ -825,12 +825,12 @@ p {
 .nav-actions button {
     background: white;
     border: 2px solid #e5e7eb;
-    padding: 12px 24px;
+    padding: 10px 20px;
     display: flex;
     align-items: center;
-    gap: 12px;
-    font-size: 1.2rem;
-    /* Massive nav buttons */
+    gap: 10px;
+    font-size: 1rem;
+    /* Standard nav buttons */
     font-weight: 700;
     border-radius: 12px;
 }
