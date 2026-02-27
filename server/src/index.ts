@@ -150,6 +150,15 @@ app.get('/api/history', async (req, res) => {
     res.json(history);
 });
 
+// Serve static files in production
+const path = require('path');
+if (process.env.NODE_ENV === 'production') {
+    app.use(express.static(path.join(__dirname, '../../client/dist')));
+    app.get('*', (req, res) => {
+        res.sendFile(path.resolve(__dirname, '../../client', 'dist', 'index.html'));
+    });
+}
+
 const PORT = process.env.PORT || 5000;
 server.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
