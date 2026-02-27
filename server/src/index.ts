@@ -84,23 +84,9 @@ io.on('connection', (socket) => {
 
     socket.on('create_poll', async (data) => {
         try {
-            if (activeInterval) clearInterval(activeInterval);
-
             const poll = await PollService.createPoll(data);
             const enrichedPoll = await PollService.getEnrichedPoll(poll);
             io.emit('new_poll', enrichedPoll);
-
-            // Timer synchronization broadcast
-            let remaining = data.duration;
-            activeInterval = setInterval(() => {
-                remaining--;
-                io.emit('timer_tick', { remaining });
-                if (remaining <= 0) {
-                    if (activeInterval) clearInterval(activeInterval);
-                    activeInterval = null;
-                    io.emit('poll_ended');
-                }
-            }, 1000);
         } catch (err) {
             console.error('Error creating poll:', err);
         }
@@ -145,8 +131,48 @@ app.get('/api/history', async (req, res) => {
 });
 
 app.get('/api/participants', async (req, res) => {
+    // Cleanup old participants (not seen in last 30s)
+    const timeout = new Date(Date.now() - 30000);
+    await Participant.deleteMany({ lastSeen: { $lt: timeout } });
+
     const participants = await Participant.find();
     res.json(participants);
+});
+
+app.post('/api/participants/heartbeat', async (req, res) => {
+    const { name, role, socketId } = req.body;
+    if (!name) return res.status(400).json({ error: 'Name is required' });
+
+    await Participant.findOneAndUpdate(
+        { name, role }, // Match by user identity
+        { socketId: socketId || 'polling', lastSeen: new Date() },
+        { upsert: true }
+    );
+    res.json({ success: true });
+});
+
+app.get('/api/chat', async (req, res) => {
+    const history = await ChatMessage.find().sort({ timestamp: -1 }).limit(50);
+    res.json(history.reverse());
+});
+
+app.post('/api/chat', async (req, res) => {
+    const { user, text } = req.body;
+    const chatMsg = new ChatMessage({ user, text, timestamp: new Date() });
+    await chatMsg.save();
+    io.emit('new_message', chatMsg);
+    res.json(chatMsg);
+});
+
+app.post('/api/poll', async (req, res) => {
+    try {
+        const poll = await PollService.createPoll(req.body);
+        const enriched = await PollService.getEnrichedPoll(poll);
+        io.emit('new_poll', enriched);
+        res.json(enriched);
+    } catch (err: any) {
+        res.status(500).json({ error: err.message });
+    }
 });
 
 // Serve static files in production

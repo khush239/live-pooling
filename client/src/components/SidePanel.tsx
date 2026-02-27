@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Socket } from 'socket.io-client';
+import axios from 'axios';
 import { Send, MessageSquare, Users } from 'lucide-react';
 
 interface Props {
@@ -25,9 +26,25 @@ const SidePanel: React.FC<Props> = ({ socket, participants, userName, isTeacher,
             setChatMessages((prev) => [...prev, msg]);
         });
 
+        // Polling fallback for chat history
+        const pollChat = async () => {
+            if (!socket.connected) {
+                try {
+                    const API_URL = import.meta.env.VITE_API_URL || (import.meta.env.PROD ? '' : 'http://localhost:5000');
+                    const res = await axios.get(`${API_URL}/api/chat`);
+                    setChatMessages(res.data);
+                } catch (e) {
+                    console.error('Chat poll failed', e);
+                }
+            }
+        };
+
+        const chatInterval = setInterval(pollChat, 5000);
+
         return () => {
             socket.off('chat_history');
             socket.off('new_message');
+            clearInterval(chatInterval);
         };
     }, [socket]);
 
@@ -35,9 +52,21 @@ const SidePanel: React.FC<Props> = ({ socket, participants, userName, isTeacher,
         messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     }, [chatMessages]);
 
-    const sendMessage = () => {
-        if (!message.trim() || !socket) return;
-        socket.emit('send_message', message);
+    const sendMessage = async () => {
+        if (!message.trim()) return;
+
+        const API_URL = import.meta.env.VITE_API_URL || (import.meta.env.PROD ? '' : 'http://localhost:5000');
+
+        if (socket?.connected) {
+            socket.emit('send_message', message);
+        } else {
+            // Fallback to API
+            try {
+                await axios.post(`${API_URL}/api/chat`, { user: userName, text: message });
+            } catch (e) {
+                console.error('API Send failed', e);
+            }
+        }
         setMessage('');
     };
 
