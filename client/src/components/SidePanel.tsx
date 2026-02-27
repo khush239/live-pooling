@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Socket } from 'socket.io-client';
-import { Send, MessageSquare, Users, X } from 'lucide-react';
+import { Send, MessageSquare, Users } from 'lucide-react';
 
 interface Props {
     socket: Socket | null;
