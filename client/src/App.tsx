@@ -33,6 +33,8 @@ const App: React.FC = () => {
     sessionStorage.setItem('user', JSON.stringify(userData));
   };
 
+  const [isSidebarOpen, setSidebarOpen] = useState(false);
+
   if (isKicked) {
     return <KickedScreen />;
   }
@@ -48,19 +50,27 @@ const App: React.FC = () => {
           name={user.name}
           socket={socket}
           participants={participants}
+          onToggleSidebar={() => setSidebarOpen(!isSidebarOpen)}
         />
       ) : (
         <StudentDashboard
           name={user.name}
           socket={socket}
           participants={participants}
+          onToggleSidebar={() => setSidebarOpen(!isSidebarOpen)}
         />
       )}
+      <div
+        className={`side-panel-overlay ${isSidebarOpen ? 'open' : ''}`}
+        onClick={() => setSidebarOpen(false)}
+      />
       <SidePanel
         socket={socket}
         participants={participants}
         userName={user.name}
         isTeacher={user.role === 'teacher'}
+        isOpen={isSidebarOpen}
+        onClose={() => setSidebarOpen(false)}
       />
     </div>
   );

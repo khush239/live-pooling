@@ -7,9 +7,11 @@ interface Props {
     participants: any[];
     userName: string;
     isTeacher: boolean;
+    isOpen: boolean;
+    onClose: () => void;
 }
 
-const SidePanel: React.FC<Props> = ({ socket, participants, userName, isTeacher }) => {
+const SidePanel: React.FC<Props> = ({ socket, participants, userName, isTeacher, isOpen, onClose }) => {
     const [activeTab, setActiveTab] = useState<'chat' | 'participants'>('chat');
     const [message, setMessage] = useState('');
     const [chatMessages, setChatMessages] = useState<any[]>([]);
@@ -44,7 +46,10 @@ const SidePanel: React.FC<Props> = ({ socket, participants, userName, isTeacher 
     };
 
     return (
-        <div className="side-panel">
+        <div className={`side-panel ${isOpen ? 'open' : ''}`}>
+            <div className="side-panel-header mobile-only">
+                <button className="close-side-panel" onClick={onClose}>Close</button>
+            </div>
             <div className="side-panel-tabs">
                 <button
                     className={activeTab === 'chat' ? 'active' : ''}

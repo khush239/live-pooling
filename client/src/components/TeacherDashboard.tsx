@@ -1,15 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Socket } from 'socket.io-client';
-import { Plus, History, LogOut, ChevronDown } from 'lucide-react';
+import { Plus, History, LogOut, ChevronDown, MessageSquare } from 'lucide-react';
 
 interface Props {
     name: string;
     socket: Socket | null;
     participants: any[];
+    onToggleSidebar: () => void;
 }
 
-const TeacherDashboard: React.FC<Props> = ({ name, socket, participants: _participants }) => {
+const TeacherDashboard: React.FC<Props> = ({ name, socket, participants: _participants, onToggleSidebar }) => {
     const [view, setView] = useState<'create' | 'live' | 'history'>('create');
     const [question, setQuestion] = useState('');
     const [options, setOptions] = useState([
@@ -81,7 +82,8 @@ const TeacherDashboard: React.FC<Props> = ({ name, socket, participants: _partic
                     </div>
                 </div>
                 <div className="nav-actions">
-                    <button onClick={() => setView('history')} className={view === 'history' ? 'active' : ''}><History size={20} /> History</button>
+                    <button onClick={onToggleSidebar} className="mobile-only chat-toggle"><MessageSquare size={20} /></button>
+                    <button onClick={() => setView('history')} className={view === 'history' ? 'active' : ''}><History size={20} /> <span className="hide-mobile">History</span></button>
                     <button onClick={() => { sessionStorage.clear(); window.location.reload(); }} className="logout"><LogOut size={20} /></button>
                 </div>
             </div>
