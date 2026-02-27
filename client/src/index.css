@@ -273,6 +273,10 @@ p {
     justify-content: space-between;
     align-items: center;
     margin-bottom: 24px;
+    width: 100%;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .poll-area {
@@ -283,6 +287,10 @@ p {
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
     position: relative;
     overflow-y: auto;
+    width: 100%;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 @media (min-width: 768px) {
