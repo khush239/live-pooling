@@ -91,14 +91,10 @@ const TeacherDashboard: React.FC<Props> = ({ name, socket, participants: _partic
             <div className="poll-area">
                 {view === 'create' && (
                     <div className="create-poll">
-                        <div className="badge" style={{ marginBottom: '2rem' }}>Intervue Poll</div>
-                        <h1>Let's <span>Get Started</span></h1>
-                        <p>you'll have the ability to create and manage polls, ask questions, and monitor your students' responses in real-time.</p>
-
                         <div className="poll-form-header">
-                            <h3>Enter your question</h3>
+                            <h3>Create New Poll</h3>
                             <div className="duration-select">
-                                <span>{duration === 120 ? '2 minutes' : `${duration} seconds`}</span>
+                                <span>{duration === 120 ? '2m' : `${duration}s`}</span>
                                 <select
                                     value={duration}
                                     onChange={e => setDuration(Number(e.target.value))}

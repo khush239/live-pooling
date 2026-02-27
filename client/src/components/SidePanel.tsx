@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Socket } from 'socket.io-client';
-import { Send } from 'lucide-react';
+import { Send, MessageSquare, Users, X } from 'lucide-react';
 
 interface Props {
     socket: Socket | null;
@@ -54,14 +54,17 @@ const SidePanel: React.FC<Props> = ({ socket, participants, userName, isTeacher,
                 <button
                     className={activeTab === 'chat' ? 'active' : ''}
                     onClick={() => setActiveTab('chat')}
+                    title="Chat"
                 >
-                    Chat
+                    <MessageSquare size={18} />
                 </button>
                 <button
                     className={activeTab === 'participants' ? 'active' : ''}
                     onClick={() => setActiveTab('participants')}
+                    title="Participants"
                 >
-                    Participants ({participants.length})
+                    <Users size={18} />
+                    <span style={{ fontSize: '0.8rem', marginLeft: '4px' }}>{participants.length}</span>
                 </button>
             </div>
 

@@ -20,70 +20,52 @@
 
 html {
     font-size: 14px;
-    /* Base for smaller mobile */
-}
-
-@media (min-width: 480px) {
-    html {
-        font-size: 15px;
-    }
-}
-
-@media (min-width: 768px) {
-    html {
-        font-size: 16px;
-    }
 }
 
 @media (min-width: 1440px) {
     html {
-        font-size: 18px;
-        /* Comfortable for wide screens */
+        font-size: 16px;
     }
 }
 
 /* Onboarding */
 .onboarding-card {
     background: white;
-    padding: 3rem 2.5rem;
-    border-radius: 32px;
-    max-width: 1000px;
-    /* Adjusted width */
-    width: 95%;
+    padding: 2rem;
+    border-radius: 20px;
+    max-width: 500px;
+    width: 90%;
     text-align: center;
-    box-shadow: 0 50px 120px rgba(0, 0, 0, 0.05);
+    border: 1px solid #f3f4f6;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.03);
 }
 
 .badge {
     display: inline-flex;
     align-items: center;
-    gap: 8px;
-    padding: 6px 14px;
-    background: var(--primary);
-    color: white;
+    gap: 6px;
+    padding: 4px 12px;
+    background: #f0fdf4;
+    color: var(--primary);
+    border: 1px solid var(--border);
     border-radius: 30px;
-    font-size: 0.85rem;
-    font-weight: 700;
-    margin-bottom: 16px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    margin-bottom: 12px;
 }
 
 h1 {
-    margin-bottom: 12px;
-    font-size: 2.2rem;
+    margin-bottom: 8px;
+    font-size: 1.5rem;
     font-weight: 700;
     color: var(--text-main);
 }
 
-h1 span {
-    color: var(--primary);
-    font-weight: 800;
-}
-
 p {
     color: var(--text-muted);
-    font-size: 1.1rem;
-    margin-bottom: 32px;
-    line-height: 1.6;
+    font-size: 0.95rem;
+    margin-bottom: 1.5rem;
+    line-height: 1.5;
 }
 
 .onboarding-card h1 {
@@ -119,9 +101,9 @@ p {
 
 .role-option {
     flex: 1;
-    border: 2px solid var(--border);
-    border-radius: 20px;
-    padding: 3rem 2.5rem;
+    border: 1px solid #f3f4f6;
+    border-radius: 12px;
+    padding: 1.5rem;
     text-align: left;
     cursor: pointer;
     transition: all 0.2s;
@@ -130,14 +112,12 @@ p {
 
 .role-option:hover {
     border-color: var(--primary);
-    transform: translateY(-4px);
-    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.03);
+    background: #f0fdf4;
 }
 
 .role-option.active {
     border-color: var(--primary);
-    background: #fdfdff;
-    box-shadow: 0 0 0 1px var(--primary);
+    background: #f0fdf4;
 }
 
 .role-title {
@@ -250,6 +230,7 @@ p {
         flex-direction: row;
         height: 100vh;
         overflow: hidden;
+        background: #f8fafc;
     }
 }
 
@@ -281,22 +262,21 @@ p {
 
 .poll-area {
     background: white;
-    border-radius: 20px;
+    border-radius: 12px;
     padding: 1.5rem;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+    border: 1px solid #f1f5f9;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
     position: relative;
     overflow-y: auto;
     width: 100%;
-    max-width: 1200px;
-    margin-left: auto;
-    margin-right: auto;
-    max-height: calc(100vh - 12rem);
+    max-width: 900px;
+    margin: 0 auto;
+    max-height: calc(100vh - 10rem);
 }
 
 @media (min-width: 768px) {
     .poll-area {
-        border-radius: 24px;
-        padding: 3rem;
+        padding: 2rem;
     }
 }
 
@@ -324,11 +304,11 @@ p {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 1.5rem;
+    margin-bottom: 1rem;
 }
 
 .poll-form-header h3 {
-    font-size: 1.5rem;
+    font-size: 1.25rem;
     font-weight: 700;
 }
 
@@ -377,7 +357,7 @@ p {
 
 .options-section-header {
     display: flex;
-    margin-bottom: 2rem;
+    margin-bottom: 1rem;
 }
 
 .options-section-header .left {
@@ -389,15 +369,15 @@ p {
 }
 
 .options-section-header h4 {
-    font-size: 1.25rem;
+    font-size: 1.1rem;
     font-weight: 700;
 }
 
 .option-row {
     display: flex;
-    gap: 2rem;
+    gap: 1.5rem;
     align-items: center;
-    margin-bottom: 1.5rem;
+    margin-bottom: 1rem;
 }
 
 .option-row .opt-input-wrapper {
@@ -423,11 +403,11 @@ p {
 
 .option-row input {
     width: 100%;
-    background: #f3f4f6;
-    border: none;
-    border-radius: 12px;
-    padding: 1.25rem 2rem;
-    font-size: 1.25rem;
+    background: #f8fafc;
+    border: 1px solid #f1f5f9;
+    border-radius: 10px;
+    padding: 0.75rem 1.25rem;
+    font-size: 1.1rem;
     font-weight: 600;
     outline: none;
 }
@@ -539,27 +519,23 @@ p {
     top: 0;
     right: 0;
     width: 100%;
-    max-width: 400px;
+    max-width: 320px;
     height: 100vh;
     background: white;
-    border-left: 1px solid #e5e7eb;
+    border-left: 1px solid #f1f5f9;
     display: flex;
     flex-direction: column;
     z-index: 1000;
     transform: translateX(100%);
-    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.side-panel.open {
-    transform: translateX(0);
+    transition: transform 0.2s ease;
 }
 
 @media (min-width: 1024px) {
     .side-panel {
         position: relative;
         transform: translateX(0);
-        width: 400px;
-        min-width: 400px;
+        width: 320px;
+        min-width: 320px;
         z-index: 1;
     }
 }
