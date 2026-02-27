@@ -1,3 +1,4 @@
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Socket } from 'socket.io-client';
 import { Plus, History, LogOut, ChevronDown, MessageSquare } from 'lucide-react';
