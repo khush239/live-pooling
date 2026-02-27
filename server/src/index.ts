@@ -7,6 +7,7 @@ import dotenv from 'dotenv';
 import PollService from './services/PollService';
 import Participant from './models/Participant';
 import ChatMessage from './models/ChatMessage';
+import connectDB from './lib/db';
 
 dotenv.config();
 
@@ -22,11 +23,8 @@ const io = new Server(server, {
 app.use(cors());
 app.use(express.json());
 
-// MongoDB Connection
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/polling-system';
-mongoose.connect(MONGODB_URI)
-    .then(() => console.log('Connected to MongoDB'))
-    .catch(err => console.error('MongoDB connection error:', err));
+// MongoDB Connection management
+connectDB();
 
 // State for real-time tracking (Backups for Serverless)
 // Note: Memory will be cleared on Vercel, so we use DB as source of truth
@@ -166,10 +164,29 @@ app.post('/api/chat', async (req, res) => {
 
 app.post('/api/poll', async (req, res) => {
     try {
+        await connectDB();
         const poll = await PollService.createPoll(req.body);
         const enriched = await PollService.getEnrichedPoll(poll);
         io.emit('new_poll', enriched);
         res.json(enriched);
+    } catch (err: any) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+app.post('/api/vote', async (req, res) => {
+    try {
+        await connectDB();
+        const { pollId, studentName, optionId } = req.body;
+        await PollService.submitVote(pollId, studentName, optionId);
+
+        const poll = await PollService.getActivePoll();
+        if (poll) {
+            const pollStats = await PollService.getEnrichedPoll(poll);
+            io.emit('vote_update', pollStats);
+            return res.json(pollStats);
+        }
+        res.json({ success: true });
     } catch (err: any) {
         res.status(500).json({ error: err.message });
     }

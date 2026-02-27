@@ -77,13 +77,29 @@ const StudentDashboard: React.FC<Props> = ({ name, socket, participants: _partic
         }
     };
 
-    const handleVote = () => {
+    const handleVote = async () => {
         if (!selectedOption || !activePoll || hasVoted || timeLeft === 0) return;
-        socket?.emit('submit_vote', {
-            pollId: activePoll._id,
-            studentName: name,
-            optionId: selectedOption
-        });
+
+        if (socket?.connected) {
+            socket.emit('submit_vote', {
+                pollId: activePoll._id,
+                studentName: name,
+                optionId: selectedOption
+            });
+        } else {
+            // Fallback to REST API
+            try {
+                const API_URL = import.meta.env.VITE_API_URL || (import.meta.env.PROD ? '' : 'http://localhost:5000');
+                await axios.post(`${API_URL}/api/vote`, {
+                    pollId: activePoll._id,
+                    studentName: name,
+                    optionId: selectedOption
+                });
+            } catch (err: any) {
+                console.error('API Vote failed:', err.message);
+                return; // Don't set hasVoted if it failed
+            }
+        }
         setHasVoted(true);
     };
 
