@@ -1,8 +1,8 @@
-# Live Pooling System 🚀
+# Live Pooling System 
 
 A real-time, interactive polling system built for classrooms and live sessions. Teachers can create instant questions, and students can vote and see live-updating visual results.
 
-## ✨ Features
+##  Features
 
 - **Teacher Dashboard**: Create polls with multiple options, set timers, and mark correct answers.
 - **Student Dashboard**: Real-time voting interface with live visual progress bars.
@@ -11,14 +11,14 @@ A real-time, interactive polling system built for classrooms and live sessions. 
 - **Participant Management**: Teacher can see active participants and manage the session.
 - **Poll History**: View past questions and their final results.
 
-## 🛠️ Tech Stack
+##  Tech Stack
 
 - **Frontend**: React, Vite, Framer Motion, Lucide React, Socket.io-client.
 - **Backend**: Node.js, Express, Socket.io.
 - **Database**: MongoDB (Mongoose).
 - **Styling**: Vanilla CSS with a custom modern design system.
 
-## 🚀 Getting Started
+##  Getting Started
 
 ### Prerequisites
 
@@ -38,7 +38,7 @@ A real-time, interactive polling system built for classrooms and live sessions. 
    npm install && npm run build
    ```
 
-## 🌐 Deployment
+##  Deployment
 
 ### Vercel Deployment (Live)
 
@@ -56,6 +56,4 @@ For the best experience with persistent WebSockets (instant updates):
 3. **Start Command**: `npm start`
 4. **Environment Variables**: Add `MONGODB_URI` and `NODE_ENV=production`.
 
-## 📄 License
 
-ISC
